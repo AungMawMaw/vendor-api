@@ -97,6 +97,7 @@ jobs:
       #     docker build -t $AWS_ECR_REGISTRY/$AWS_ECR_REPOSITORY:$AWS_IMAGE_TAG --target $AWS_ECR_REPOSITORY .
       #     docker push $AWS_ECR_REGISTRY/$AWS_ECR_REPOSITORY:$AWS_IMAGE_TAG
       #     echo "::set-output name=image::$AWS_ECR_REGISTRY/$AWS_ECR_REPOSITORY:$AWS_IMAGE_TAG"
+      #
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
