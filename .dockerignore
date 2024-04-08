@@ -1,0 +1,6 @@
+gitsecret
+.git
+.catche
+/nodemodules
+/build/*
+

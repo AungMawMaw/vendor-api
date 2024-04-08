@@ -1,0 +1,22 @@
+{
+  "name": "vendor-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/AungMawMaw/vendor-api.git",
+  "author": "AungMawMaw <aungmaw.bc@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "tsc && node \"build/index.js\""
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.549.0",
+    "aws-sdk": "^2.1594.0",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@aws-sdk/util-dynamodb": "^3.549.0",
+    "@types/aws-lambda": "^8.10.137",
+    "@types/node": "^20.12.5",
+    "typescript": "^5.4.4"
+  }
+}
