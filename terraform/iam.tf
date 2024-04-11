@@ -35,6 +35,7 @@ data "aws_iam_policy_document" "lambda_websocket" {
       "dynamodb:Scan",
       "dynamodb:GetItem",
       "dynamodb:PutItem",
+      "dynamodb:UpdateItem",
       "dynamodb:DeleteItem",
       "sqs:ReceiveMessage",
       "sqs:DeleteMessage",

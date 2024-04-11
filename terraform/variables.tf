@@ -17,7 +17,7 @@ variable "sqs_queue_name" {
 }
 
 variable "sqs_queue_url" {
-  type        = string
+  # type        = string
   description = "Queue url"
   default     = "https://sqs.ap-southeast-1.amazonaws.com/688217156264/vendor-twitter-sqs_queue"
 }

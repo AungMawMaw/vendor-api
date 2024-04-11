@@ -20,3 +20,7 @@ docker run -v $HOME/.aws:/root/.aws:ro \
 
 curl -XPOST "http://localhost:9001/2015-03-31/functions/function/invocations" \
  -d '{"requestContext":{"connectionId":"1234"}}'
+
+after all done
+install wscat
+npm install -g wscat

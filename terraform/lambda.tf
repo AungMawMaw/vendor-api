@@ -15,7 +15,7 @@ resource "aws_lambda_permission" "connect_permision" {
   principal     = "apigateway.amazonaws.com"
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
-  source_arn = "${aws_apigatewayv2_api.websocket_gw.execution_arn}/*/*" 
+  source_arn    = "${aws_apigatewayv2_api.websocket_gw.execution_arn}/*/*"
 }
 #### end of lambda connect
 
@@ -36,7 +36,7 @@ resource "aws_lambda_permission" "disconnect_permision" {
   principal     = "apigateway.amazonaws.com"
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
-  source_arn = "${aws_apigatewayv2_api.websocket_gw.execution_arn}/*/*" 
+  source_arn    = "${aws_apigatewayv2_api.websocket_gw.execution_arn}/*/*"
 }
 #### end of lambda disconnect
 
@@ -49,7 +49,7 @@ resource "aws_lambda_function" "sendvendor" {
   environment {
     variables = {
       AWS_WEBSOCKET_TABLE_NAME = "${var.websocket_table_name}"
-      AWS_SQS_QUEUE_URL        = "${var.sqs_queue_url}"
+      AWS_SQS_QUEUE_URL        = "https://sqs.ap-southeast-1.amazonaws.com/688217156264/vendor-twitter-sqs_queue"
       AWS_WEBSOCKET_URL        = "${aws_apigatewayv2_api.websocket_gw.api_endpoint}/${var.api_gateway_stage_name}"
     }
   }
@@ -87,7 +87,7 @@ resource "aws_lambda_permission" "getvendor_permision" {
   principal     = "apigateway.amazonaws.com"
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
-  source_arn = "${aws_apigatewayv2_api.http_gw.execution_arn}/*/*" 
+  source_arn    = "${aws_apigatewayv2_api.http_gw.execution_arn}/*/*"
 }
 
 #### end of lambda getvendors
