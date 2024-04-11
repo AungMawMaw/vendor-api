@@ -40,10 +40,10 @@ resource "aws_lambda_permission" "disconnect_permision" {
 }
 #### end of lambda disconnect
 
-resource "aws_lambda_function" "send-vendor" {
-  function_name = "${var.app_name}-send-vendor"
+resource "aws_lambda_function" "sendvendor" {
+  function_name = "${var.app_name}-sendvendor"
   role          = aws_iam_role.lambda_main.arn
-  image_uri     = "${local.account_id}.dkr.erc.${var.aws_region}.amazonaws.com./send-vendor:${var.image_tag}"
+  image_uri     = "${local.account_id}.dkr.erc.${var.aws_region}.amazonaws.com./sendvendor:${var.image_tag}"
   package_type  = "Image"
   timeout       = 30
   environment {
@@ -57,24 +57,24 @@ resource "aws_lambda_function" "send-vendor" {
 
 resource "aws_lambda_event_source_mapping" "sqs_trigger" {
   event_source_arn = "arn.aws.sqs:${var.aws_region}:${local.account_id}:${var.sqs_queue_name}"
-  function_name    = aws_lambda_function.send-vendor.arn
+  function_name    = aws_lambda_function.sendvendor.arn
 }
 
-resource "aws_lambda_permission" "send-vendor_permision" {
+resource "aws_lambda_permission" "sendvendor_permision" {
   statement_id = "AllowExecutionFromSQS"
   source_arn   = "arn.aws.sqs:${var.aws_region}:${local.account_id}:${var.sqs_queue_name}"
 
-  function_name = aws_lambda_function.send-vendor.function_name
+  function_name = aws_lambda_function.sendvendor.function_name
   principal     = "sqs.amazonaws.com"
   action        = "lambda:InvokeFunction"
   # source_arn = "" #TODO: apigateway
 }
-#### end of lambda send-vendor
+#### end of lambda sendvendor
 
-resource "aws_lambda_function" "get-vendor" {
-  function_name = "${var.app_name}-get-vendor"
+resource "aws_lambda_function" "getvendor" {
+  function_name = "${var.app_name}-getvendor"
   role          = aws_iam_role.lambda_main.arn
-  image_uri     = "${local.account_id}.dkr.erc.${var.aws_region}.amazonaws.com./get-vendor:${var.image_tag}"
+  image_uri     = "${local.account_id}.dkr.erc.${var.aws_region}.amazonaws.com./getvendor:${var.image_tag}"
   package_type  = "Image"
   timeout       = 30
   environment {
@@ -83,15 +83,15 @@ resource "aws_lambda_function" "get-vendor" {
     }
   }
 }
-resource "aws_lambda_permission" "get-vendor_permision" {
-  function_name = aws_lambda_function.get-vendor.function_name
+resource "aws_lambda_permission" "getvendor_permision" {
+  function_name = aws_lambda_function.getvendor.function_name
   principal     = "apigateway.amazonaws.com"
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
   # source_arn = "" #TODO: apigateway
 }
 
-#### end of lambda get-vendor
+#### end of lambda getvendor
 
 
 
