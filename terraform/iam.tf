@@ -4,7 +4,7 @@
 data "aws_iam_policy_document" "assume_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
-    effect = "Allow"
+    effect  = "Allow"
     principals {
       type        = "Service"
       identifiers = ["lambda.amazonaws.com"]
@@ -20,17 +20,17 @@ resource "aws_iam_role" "lambda_main" {
 
 # adding lambdaexecutionrole to lambda
 resource "aws_iam_role_policy_attachment" "attach_exec_role" {
-  role = aws_iam_role.lambda_main.name
+  role       = aws_iam_role.lambda_main.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 #end of lambda
 
 #create iampolicy
 data "aws_iam_policy_document" "lambda_websocket" {
-   statement {
+  statement {
     effect = "Allow"
-       actions = [
-      "execute-api:ManageConnection",
+    actions = [
+      "execute-api:ManageConnections",
       "dynamodb:DescribeTable",
       "dynamodb:Scan",
       "dynamodb:GetItem",
@@ -38,24 +38,24 @@ data "aws_iam_policy_document" "lambda_websocket" {
       "dynamodb:DeleteItem",
       "sqs:ReceiveMessage",
       "sqs:DeleteMessage",
-      "sqs:GetQueueAttrivutes",
-       ]
-       resources = [
-           "arn:aws:sqs:${var.aws_region}:${local.account_id}:${var.sqs_queue_name}",
-           "arn:aws:dynamodb:${var.aws_region}:${local.account_id}:table/${var.websocket_table_name}",
-           "arn:aws:dynamodb:${var.aws_region}:${local.account_id}:table/${var.vendor_table_name}",
+      "sqs:GetQueueAttributes",
+    ]
+    resources = [
+      "arn:aws:sqs:${var.aws_region}:${local.account_id}:${var.sqs_queue_name}",
+      "arn:aws:dynamodb:${var.aws_region}:${local.account_id}:table/${var.websocket_table_name}",
+      "arn:aws:dynamodb:${var.aws_region}:${local.account_id}:table/${var.vendor_table_name}",
       ### TODO: websocket
-       ]
-   }
+    ]
+  }
 
 }
 
 resource "aws_iam_policy" "lambda_websocket" {
-   name = "${var.app_name}-lambda-websocket"
-   policy = "${data.aws_iam_policy_document.lambda_websocket.json}"
+  name   = "${var.app_name}-lambda-websocket"
+  policy = data.aws_iam_policy_document.lambda_websocket.json
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_websocket" {
   policy_arn = aws_iam_policy.lambda_websocket.arn
-  role = aws_iam_role.lambda_main.name
+  role       = aws_iam_role.lambda_main.name
 }
