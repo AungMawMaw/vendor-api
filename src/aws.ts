@@ -7,10 +7,39 @@ import {
   UpdateItemCommandOutput,
   DescribeTableCommandOutput,
   ScanCommandInput,
+  InternalServerError,
   UpdateItemCommandInput,
+  DeleteItemCommand,
+  DescribeTableCommandInput,
+  DeleteItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
+import {
+  CreateQueueCommand,
+  CreateQueueCommandInput,
+  DeleteQueueCommand,
+  DeleteQueueCommandInput,
+  GetQueueUrlCommand,
+  GetQueueUrlCommandInput,
+  QueueDoesNotExist,
+  SQSClient,
+  SendMessageCommand,
+  SendMessageCommandInput,
+  SendMessageCommandOutput,
+  DeleteMessageCommand,
+  DeleteMessageCommandInput,
+} from "@aws-sdk/client-sqs";
+import {
+  ApiGatewayManagementApiClient,
+  PostToConnectionCommand,
+  PostToConnectionCommandInputType,
+} from "@aws-sdk/client-apigatewaymanagementapi";
+type APIGatewayManagementApi = ApiGatewayManagementApiClient;
 import dotenv from "dotenv";
+import { PromiseResult } from "aws-sdk/lib/request";
+dotenv.config();
+
+const sqsClient = new SQSClient({ region: process.env.AWS_REGION });
 dotenv.config();
 
 const client = new DynamoDBClient({ region: process.env.AWS_REGION });
@@ -35,7 +64,7 @@ export const dynamodb_scanTable = async function* (
   tableName: string,
   limit: number = 25,
   lastEvaluatedKey?: Record<string, any>,
-): AsyncGenerator<ScanCommandOutput, void, undefined> {
+): AsyncGenerator<ScanCommandOutput, void, unknown> {
   while (true) {
     const params: ScanCommandInput = {
       TableName: tableName,
@@ -87,6 +116,8 @@ export const dynamodb_getAllScanResult = async <T>(
   }
 };
 
+//NOTE: for websocket dynamodb table
+
 export const dynamodb_AddConnection = async (
   tableName: string,
   connectionId: string,
@@ -107,5 +138,98 @@ export const dynamodb_AddConnection = async (
   } catch (e) {
     console.error("Error add connection:", e);
     throw e;
+  }
+};
+export const dynamodb_RemoveConnection = async (
+  tableName: string,
+  connectionId: string,
+) => {
+  try {
+    const params: DeleteItemCommandInput = {
+      TableName: tableName,
+      Key: marshall({
+        connectionId: connectionId,
+      }),
+    };
+
+    const command = new DeleteItemCommand(params);
+
+    const result = await client.send(command);
+
+    return result;
+  } catch (e) {
+    console.error("Error remove connection:", e);
+    // throw e;
+    return new Error("error remove connection unknown type");
+  }
+};
+
+// NOTE: for SQS
+export const sqsDeleteMsg = async (queueUrl: string, receiptHandle: string) => {
+  try {
+    // Construct parameters for DeleteQueueCommand
+    const params: DeleteMessageCommandInput = {
+      QueueUrl: queueUrl,
+      ReceiptHandle: receiptHandle,
+    };
+
+    // Create a new DeleteQueueCommand with the parameters
+    const command = new DeleteMessageCommand(params);
+
+    // Delete the queue using the DeleteQueueCommand
+    const result = await sqsClient.send(command);
+
+    // Log the result if needed
+    console.log("Queue deleted:", result);
+
+    return result; // Optionally, you can return the result
+  } catch (error) {
+    console.error("Error deleting queue:", error);
+    throw error;
+  }
+};
+// NOTE: APIGATEWAY
+interface BroadcastMessageWebsocketProps {
+  apiGateway: ApiGatewayManagementApiClient;
+  connections: any[];
+  message: string;
+  tableName: string;
+}
+export const broadcastMessageWebsocket = async (
+  props: BroadcastMessageWebsocketProps,
+) => {
+  const sendVendorCall = props.connections?.map(async (connection) => {
+    const { connectionId } = connection;
+    try {
+      await props.apiGateway.send(
+        new PostToConnectionCommand({
+          ConnectionId: connectionId,
+          Data: props.message,
+        }),
+      );
+    } catch (e) {
+      if ((e as any).statusCode === 410) {
+        console.log(`del statle connection, ${connectionId}`);
+        const removeCon_res = await dynamodb_RemoveConnection(
+          props.tableName,
+          connectionId,
+        );
+        if (removeCon_res instanceof Error) {
+          return e;
+        } else {
+          return e;
+        }
+      }
+    }
+  });
+
+  try {
+    const res = await Promise.all(sendVendorCall);
+    return res;
+  } catch (e) {
+    if (e instanceof Error) {
+      return e;
+    }
+    return new Error(` broadcastMessageWebsocket error obj unknown type Error`);
   }
 };

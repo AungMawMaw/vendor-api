@@ -5,11 +5,12 @@
   "repository": "https://github.com/AungMawMaw/vendor-api.git",
   "author": "AungMawMaw <aungmaw.bc@gmail.com>",
   "license": "MIT",
-  "scripts": {
-    "start": "tsc && node \"build/index.js\""
-  },
   "dependencies": {
+    "@aws-sdk/client-apigatewaymanagementapi": "^3.549.0",
     "@aws-sdk/client-dynamodb": "^3.549.0",
+    "@aws-sdk/client-sqs": "^3.549.0",
+    "@aws-sdk/lib-dynamodb": "^3.549.0",
+    "@aws-sdk/node-http-handler": "^3.374.0",
     "aws-sdk": "^2.1594.0",
     "dotenv": "^16.4.5"
   },
