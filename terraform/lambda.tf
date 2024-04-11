@@ -71,10 +71,10 @@ resource "aws_lambda_permission" "sendvendor_permision" {
 }
 #### end of lambda sendvendor
 
-resource "aws_lambda_function" "getvendor" {
-  function_name = "${var.app_name}-getvendor"
+resource "aws_lambda_function" "getvendors" {
+  function_name = "${var.app_name}-getvendors"
   role          = aws_iam_role.lambda_main.arn
-  image_uri     = "${local.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/getvendor:${var.image_tag}"
+  image_uri     = "${local.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/getvendors:${var.image_tag}"
   package_type  = "Image"
   timeout       = 30
   environment {
@@ -84,14 +84,14 @@ resource "aws_lambda_function" "getvendor" {
   }
 }
 resource "aws_lambda_permission" "getvendor_permision" {
-  function_name = aws_lambda_function.getvendor.function_name
+  function_name = aws_lambda_function.getvendors.function_name
   principal     = "apigateway.amazonaws.com"
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
   # source_arn = "" #TODO: apigateway
 }
 
-#### end of lambda getvendor
+#### end of lambda getvendors
 
 
 
