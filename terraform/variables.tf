@@ -13,7 +13,7 @@ variable "websocket_table_name" {
 variable "sqs_queue_name" {
   type        = string
   description = "Queue name"
-  default     = "vendor-sqs"
+  default     = "vendor_sqs"
 }
 
 variable "sqs_queue_url" {
