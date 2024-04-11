@@ -56,13 +56,13 @@ resource "aws_lambda_function" "sendvendor" {
 }
 
 resource "aws_lambda_event_source_mapping" "sqs_trigger" {
-  event_source_arn = "arn.aws.sqs:${var.aws_region}:${local.account_id}:${var.sqs_queue_name}"
+  event_source_arn = "arn:aws:sqs:${var.aws_region}:${local.account_id}:${var.sqs_queue_name}"
   function_name    = aws_lambda_function.sendvendor.arn
 }
 
 resource "aws_lambda_permission" "sendvendor_permision" {
   statement_id = "AllowExecutionFromSQS"
-  source_arn   = "arn.aws.sqs:${var.aws_region}:${local.account_id}:${var.sqs_queue_name}"
+  source_arn   = "arn:aws:sqs:${var.aws_region}:${local.account_id}:${var.sqs_queue_name}"
 
   function_name = aws_lambda_function.sendvendor.function_name
   principal     = "sqs.amazonaws.com"
