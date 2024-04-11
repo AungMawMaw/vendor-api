@@ -36,7 +36,7 @@ RUN mkdir -p ${FUNCTION_DIR}
 CMD ["build/disconnect.handler"] 
 
 #send-vendor
-FROM amazon/aws-lambda-nodejs:18 AS send-vendor
+FROM amazon/aws-lambda-nodejs:18 AS sendvendor
 
 ARG FUNCTION_DIR="var/task"
 
@@ -50,10 +50,10 @@ RUN tsc
 
 RUN mkdir -p ${FUNCTION_DIR}
 
-CMD ["build/send-vendor.handler"] 
+CMD ["build/sendvendor.handler"] 
 
 #get-vendor
-FROM amazon/aws-lambda-nodejs:18 AS get-vendor
+FROM amazon/aws-lambda-nodejs:18 AS getvendors
 
 ARG FUNCTION_DIR="var/task"
 
@@ -67,5 +67,5 @@ RUN tsc
 
 RUN mkdir -p ${FUNCTION_DIR}
 
-CMD ["build/get-vendor.handler"] 
+CMD ["build/getvendors.handler"] 
 
