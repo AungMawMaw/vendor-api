@@ -13,7 +13,7 @@ export const handler = async (
     process.env.AWS_WEBSOCKET_TABLE_NAME ?? "websocket-connections";
   const SQS_URL =
     process.env.AWS_SQS_QUEUE_URL ??
-    "https://sqs.ap-southeast-1.amazonaws.com/688217156264/vendor-twitter-sqs_queue";
+    "https://sqs.ap-southeast-1.amazonaws.com/688217156264/vendor-sqs";
   const WEBSOCKET_URL = process.env.AWS_WEBSOCKET_URL ?? "";
 
   const endpoint = new URL(WEBSOCKET_URL);

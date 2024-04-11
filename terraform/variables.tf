@@ -13,13 +13,13 @@ variable "websocket_table_name" {
 variable "sqs_queue_name" {
   type        = string
   description = "Queue name"
-  default     = "vendor-twitter-sqs_queue"
+  default     = "vendor-sqs"
 }
 
 variable "sqs_queue_url" {
   # type        = string
   description = "Queue url"
-  default     = "https://sqs.ap-southeast-1.amazonaws.com/688217156264/vendor-twitter-sqs_queue"
+  default     = "https://sqs.ap-southeast-1.amazonaws.com/688217156264/vendor_sqs"
 }
 
 variable "api_gateway_stage_name" {
