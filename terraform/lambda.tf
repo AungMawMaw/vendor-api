@@ -1,7 +1,7 @@
 resource "aws_lambda_function" "connect" {
   function_name = "${var.app_name}-connect"
   role          = aws_iam_role.lambda_main.arn
-  image_uri     = "${local.account_id}.dkr.ecs.${var.aws_region}.amazonaws.com./connect:${var.image_tag}"
+  image_uri     = "${local.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com./connect:${var.image_tag}"
   package_type  = "Image"
   timeout       = 30
   environment {
@@ -22,7 +22,7 @@ resource "aws_lambda_permission" "connect_permision" {
 resource "aws_lambda_function" "disconnect" {
   function_name = "${var.app_name}-disconnect"
   role          = aws_iam_role.lambda_main.arn
-  image_uri     = "${local.account_id}.dkr.ecs.${var.aws_region}.amazonaws.com./disconnect:${var.image_tag}"
+  image_uri     = "${local.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com./disconnect:${var.image_tag}"
   package_type  = "Image"
   timeout       = 30
   environment {
@@ -43,7 +43,7 @@ resource "aws_lambda_permission" "disconnect_permision" {
 resource "aws_lambda_function" "sendvendor" {
   function_name = "${var.app_name}-sendvendor"
   role          = aws_iam_role.lambda_main.arn
-  image_uri     = "${local.account_id}.dkr.ecs.${var.aws_region}.amazonaws.com./sendvendor:${var.image_tag}"
+  image_uri     = "${local.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com./sendvendor:${var.image_tag}"
   package_type  = "Image"
   timeout       = 30
   environment {
@@ -74,7 +74,7 @@ resource "aws_lambda_permission" "sendvendor_permision" {
 resource "aws_lambda_function" "getvendor" {
   function_name = "${var.app_name}-getvendor"
   role          = aws_iam_role.lambda_main.arn
-  image_uri     = "${local.account_id}.dkr.ecs.${var.aws_region}.amazonaws.com./getvendor:${var.image_tag}"
+  image_uri     = "${local.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com./getvendor:${var.image_tag}"
   package_type  = "Image"
   timeout       = 30
   environment {
