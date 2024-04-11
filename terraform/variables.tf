@@ -16,6 +16,12 @@ variable "sqs_queue_name" {
   default     = "vendor-twitter-queue"
 }
 
+variable "sqs_queue_url" {
+  type        = string
+  description = "Queue url"
+  default     = "https://sqs.ap-southeast-1.amazonaws.com/688217156264/vendor-twitter-sqs_queue"
+}
+
 variable "api_gateway_stage_name" {
   type    = string
   default = "primary"
