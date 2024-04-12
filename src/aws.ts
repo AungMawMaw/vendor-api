@@ -198,12 +198,13 @@ export const broadcastMessageWebsocket = async (
   const sendVendorCall = props.connections?.map(async (connection) => {
     const { connectionId } = connection;
     try {
-      await props.apiGateway.send(
+      const res = await props.apiGateway.send(
         new PostToConnectionCommand({
           ConnectionId: connectionId,
           Data: props.message,
         }),
       );
+      console.log(res);
     } catch (e) {
       if ((e as any).statusCode === 410) {
         console.log(`del statle connection, ${connectionId}`);
