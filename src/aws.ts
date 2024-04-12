@@ -4,28 +4,15 @@ import {
   ScanCommand,
   ScanCommandOutput,
   UpdateItemCommand,
-  UpdateItemCommandOutput,
   DescribeTableCommandOutput,
   ScanCommandInput,
-  InternalServerError,
   UpdateItemCommandInput,
   DeleteItemCommand,
-  DescribeTableCommandInput,
   DeleteItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import {
-  CreateQueueCommand,
-  CreateQueueCommandInput,
-  DeleteQueueCommand,
-  DeleteQueueCommandInput,
-  GetQueueUrlCommand,
-  GetQueueUrlCommandInput,
-  QueueDoesNotExist,
   SQSClient,
-  SendMessageCommand,
-  SendMessageCommandInput,
-  SendMessageCommandOutput,
   DeleteMessageCommand,
   DeleteMessageCommandInput,
 } from "@aws-sdk/client-sqs";
@@ -33,14 +20,11 @@ import {
   ApiGatewayManagementApiClient,
   PostToConnectionCommand,
   PostToConnectionCommandInputType,
-  PostToConnectionCommandOutput,
 } from "@aws-sdk/client-apigatewaymanagementapi";
 import dotenv from "dotenv";
-import { PromiseResult } from "aws-sdk/lib/request";
 dotenv.config();
 
 const sqsClient = new SQSClient({ region: process.env.AWS_REGION });
-dotenv.config();
 
 const client = new DynamoDBClient({ region: process.env.AWS_REGION });
 
@@ -203,8 +187,8 @@ export const broadcastMessageWebsocket = async (
     try {
       const input: PostToConnectionCommandInputType = {
         // PostToConnectionRequest
-        Data: new TextEncoder().encode(props.message), //new Uint8Array(), // e.g. Buffer.from("") or new TextEncoder().encode("")   // required
-        ConnectionId: "STRING_VALUE", // required
+        Data: props.message, //new Uint8Array(), // e.g. Buffer.from("") or new TextEncoder().encode("")   // required
+        ConnectionId: connectionId.toString(), // required
       };
       const command = new PostToConnectionCommand(input);
       const res = await props.apiGateway.send(command);
