@@ -70,7 +70,16 @@ export const handler = async (
   }
   console.log(`sent message: ${message} to ${dbRes.length} users!`);
 
-  await sqsDeleteMsg(SQS_URL, event.Records[0].receiptHandle);
+  try {
+    console.log(
+      "Received message. Receipt handle:",
+      event.Records[0].receiptHandle,
+    );
+    await sqsDeleteMsg(SQS_URL, event.Records[0].receiptHandle);
+  } catch (e) {
+    console.log("error at sqs del", e);
+  }
+
   return {
     statusCode: 200,
     body: JSON.stringify({

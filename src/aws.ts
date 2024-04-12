@@ -32,11 +32,8 @@ import {
 import {
   ApiGatewayManagementApiClient,
   PostToConnectionCommand,
-  PostToConnectionCommandInputType,
 } from "@aws-sdk/client-apigatewaymanagementapi";
-type APIGatewayManagementApi = ApiGatewayManagementApiClient;
 import dotenv from "dotenv";
-import { PromiseResult } from "aws-sdk/lib/request";
 dotenv.config();
 
 const sqsClient = new SQSClient({ region: process.env.AWS_REGION });

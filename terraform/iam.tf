@@ -30,7 +30,9 @@ data "aws_iam_policy_document" "lambda_websocket" {
   statement {
     effect = "Allow"
     actions = [
+      "execute-api:Invoke",
       "execute-api:ManageConnections",
+      # "execute-api:SendMessage",
       "dynamodb:DescribeTable",
       "dynamodb:Scan",
       "dynamodb:GetItem",
