@@ -32,8 +32,11 @@ import {
 import {
   ApiGatewayManagementApiClient,
   PostToConnectionCommand,
+  PostToConnectionCommandInputType,
+  PostToConnectionCommandOutput,
 } from "@aws-sdk/client-apigatewaymanagementapi";
 import dotenv from "dotenv";
+import { PromiseResult } from "aws-sdk/lib/request";
 dotenv.config();
 
 const sqsClient = new SQSClient({ region: process.env.AWS_REGION });
@@ -198,13 +201,15 @@ export const broadcastMessageWebsocket = async (
   const sendVendorCall = props.connections?.map(async (connection) => {
     const { connectionId } = connection;
     try {
-      const res = await props.apiGateway.send(
-        new PostToConnectionCommand({
-          ConnectionId: connectionId,
-          Data: props.message,
-        }),
-      );
+      const input: PostToConnectionCommandInputType = {
+        // PostToConnectionRequest
+        Data: new TextEncoder().encode(props.message), //new Uint8Array(), // e.g. Buffer.from("") or new TextEncoder().encode("")   // required
+        ConnectionId: "STRING_VALUE", // required
+      };
+      const command = new PostToConnectionCommand(input);
+      const res = await props.apiGateway.send(command);
       console.log(res);
+      return res;
     } catch (e) {
       if ((e as any).statusCode === 410) {
         console.log(`del statle connection, ${connectionId}`);
