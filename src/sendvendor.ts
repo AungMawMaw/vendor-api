@@ -30,7 +30,7 @@ export const handler = async (
         Headers: {
           "content-type": "text/plain; charset=utf-8",
         },
-        body: "event message empty or null",
+        message: "event message empty or null",
       }),
     };
   }
@@ -45,7 +45,7 @@ export const handler = async (
         Headers: {
           "content-type": "text/plain; charset=utf-8",
         },
-        body: dbRes.message,
+        message: dbRes.message,
       }),
     };
   }
@@ -64,7 +64,7 @@ export const handler = async (
         Headers: {
           "content-type": "text/plain; charset=utf-8",
         },
-        body: broadcastRes.message,
+        message: broadcastRes.message,
       }),
     };
   }
